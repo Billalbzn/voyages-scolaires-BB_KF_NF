@@ -1,0 +1,54 @@
+services:
+  app:
+    build: ./docker/php
+    container_name: voyages_app
+    restart: unless-stopped
+    working_dir: /var/www/html
+    volumes:
+      - ./www:/var/www/html
+    environment:
+      DB_HOST: db
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    depends_on:
+      - db
+    networks:
+      - voyages_net
+
+  web:
+    image: nginx:stable-alpine
+    container_name: voyages_web
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./www:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - voyages_net
+
+  db:
+    image: mariadb:10.11
+    container_name: voyages_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - voyages_net
+
+networks:
+  voyages_net:
+    driver: bridge
+
+volumes:
+  db_data:
