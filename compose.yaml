@@ -46,6 +46,17 @@ services:
     networks:
       - voyages_net
 
+  adminer:
+    image: adminer:latest
+    container_name: voyages_adminer
+    restart: unless-stopped
+    ports:
+      - "8081:8080"
+    depends_on:
+      - db
+    networks:
+      - voyages_net
+
 networks:
   voyages_net:
     driver: bridge
