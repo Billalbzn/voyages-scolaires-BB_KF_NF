@@ -9,8 +9,8 @@ Phase : 2 — Développement (CRUD, Eloquent, API REST, Rôles)
 | Bloc | Sujet | Responsable | Statut | Commits clés |
 | :--- | :--- | :--- | :--- | :--- |
 | A | Auth + Rôles + Policies | Billal Bouziane | 🟢 Terminé | 9899b22, da9c78c, aedcbac, 104090d, acc9b03, 5b111a1 |
-| B | Modèles & Migrations | Karim Fadli | 🟢 Terminé | Push final |
-| C | CRUD Voyages | Karim Fadli | 🟢 Terminé | Push final |
+| B | Modèles & Migrations | Karim Fadli | 🟢 Terminé | 3594b25, 06ca904  |
+| C | CRUD Voyages | Karim Fadli | 🟢 Terminé | b430aa0, e843314, c91a5c7, d79ec3e, 240741e |
 | D | CRUD Participants | Nolan Felmit | ⚪ À faire | — |
 | E | API REST + tests Bruno | Nolan Felmit | ⚪ À faire | — |
 
