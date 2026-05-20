@@ -1,17 +1,31 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Liste des voyages') }}
+        </h2>
+    </x-slot>
 
-@section('content')
-    <h1>Liste des voyages</h1>
-    
-    @can('create', App\Models\Voyage::class)
-        <a href="{{ route('voyages.create') }}">+ Nouveau voyage</a>
-    @endcan
-    
-    @foreach ($voyages as $voyage)
-        <div>
-            <strong>{{ $voyage->destination }}</strong>
-            {{ $voyage->date_depart }} - {{ $voyage->date_retour }}
-            <a href="{{ route('voyages.show', $voyage) }}">Détail</a>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                
+                @can('create', App\Models\Voyage::class)
+                    <div class="mb-4">
+                        <a href="{{ route('voyages.create') }}" class="text-blue-500 hover:text-blue-700">
+                            + Nouveau voyage
+                        </a>
+                    </div>
+                @endcan
+                
+                @foreach ($voyages as $voyage)
+                    <div class="mb-4 border-b pb-4">
+                        <strong class="text-lg">{{ $voyage->destination }}</strong><br>
+                        Du {{ $voyage->date_depart }} au {{ $voyage->date_retour }}<br>
+                        <a href="{{ route('voyages.show', $voyage) }}" class="text-sm text-gray-500 hover:text-gray-700">Détail</a>
+                    </div>
+                @endforeach
+
+            </div>
         </div>
-    @endforeach
-@endsection
+    </div>
+</x-app-layout>
