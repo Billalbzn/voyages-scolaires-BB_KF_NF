@@ -12,7 +12,7 @@ Phase : 2 — Développement (CRUD, Eloquent, API REST, Rôles)
 | B | Modèles & Migrations | Karim Fadli | 🟢 Terminé | 3594b25, 06ca904  |
 | C | CRUD Voyages | Karim Fadli | 🟢 Terminé | b430aa0, e843314, c91a5c7, d79ec3e, 240741e |
 | D | CRUD Participants | Nolan Felmit | 🟢 Terminé | dca1b8f |
-| E | API REST + tests Bruno | Nolan Felmit | ⚪ À faire | — |
+| E | API REST + tests Bruno | Nolan Felmit | 🟢 Terminé | 31df1ec, ef2b39d |
 
 *Légende statuts : 🟢 Terminé · 🟡 En cours · ⚪ À faire · 🔴 Bloqué*
 
@@ -76,7 +76,7 @@ Phase : 2 — Développement (CRUD, Eloquent, API REST, Rôles)
 * L'importance vitale des relations Eloquent (BelongsTo, HasMany) pour faciliter le requêtage complexe (ex: récupérer le voyage, ses participants, et les infos utilisateurs des participants en une seule ligne).
 * Que l'affichage d'un bouton ne dépend pas uniquement de la logique PHP, mais aussi des outils Frontend (Vite/Tailwind) et de la gestion du cache de Laravel.
 
-**Commits représentatifs :3594b25, 06ca904, b430aa0, e843314, 6ef0087, c91a5c7, d79ec3e, 240741e, bac4e48, 92b32ff, 8fd789a**
+**Commits représentatifs : 3594b25, 06ca904, b430aa0, e843314, 6ef0087, c91a5c7, d79ec3e, 240741e, bac4e48, 92b32ff, 8fd789a**
 
 
 ### Nolan Felmit
@@ -84,10 +84,19 @@ Phase : 2 — Développement (CRUD, Eloquent, API REST, Rôles)
 **Blocs réalisés :** D, E
 
 **Ce que j'ai implémenté :**
-* Bloc D : Mise en place de la logique d'inscription et de la validation parentale achevée.
+* **Bloc D (CRUD Participants) :** Création du `ParticipantController` pour gérer les inscriptions. Mise en place de la logique de validation parentale pour les voyages scolaires et gestion des relations avec les modèles `Voyage` et `User`.
+* **Bloc E (API REST + tests Bruno) :** Développement du `VoyageApiController` pour exposer les données via des endpoints REST (index, show, store, update, destroy).
+* **Sécurisation :** Implémentation du middleware `auth:sanctum` sur toutes les routes de l'API pour garantir que seuls les utilisateurs authentifiés accèdent aux données.
+* **Tests :** Création d'une collection de requêtes dans Bruno pour tester manuellement chaque méthode de l'API, avec gestion des tokens d'authentification.
 
 **Difficulté principale rencontrée :**
-(à compléter par NF)
+* **Conflit de routage (ReflectionException) :** Lors de la mise en place du CRUD, l'oubli d'importation de la classe `ParticipantController` dans `web.php` a provoqué une erreur de réflexion système lors de l'exécution des commandes artisan, bloquant la génération de la liste des routes.
+* **Synchronisation Git :** J'ai rencontré des difficultés avec la gestion de l'historique distant (erreurs `fetch first` et conflits de fusion) suite à des modifications directes sur GitHub. L'apprentissage de la résolution de conflits via VS Code et la commande `git pull` a été nécessaire pour réaligner mon travail local avec le dépôt distant.
 
 **Ce que j'ai appris :**
-(à compléter par NF)
+* La structure MVC d'une API Laravel : comprendre comment découpler la logique du contrôleur standard du contrôleur API pour isoler les retours JSON.
+* L'importance de la configuration des routes et de l'auto-chargement des classes (le rôle crucial du fichier `web.php` et des imports `use`).
+* La gestion collaborative sous Git : gérer les conflits de version entre les contributions distantes et locales est une étape indispensable pour éviter de perdre du code.
+* L'utilisation de l'authentification API avec Laravel Sanctum pour sécuriser les endpoints en production.
+
+**Commits représentatifs :** dca1b8f, 31df1ec, ef2b39d
