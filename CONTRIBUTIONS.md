@@ -76,7 +76,7 @@ Phase : 2 — Développement (CRUD, Eloquent, API REST, Rôles)
 * L'importance vitale des relations Eloquent (BelongsTo, HasMany) pour faciliter le requêtage complexe (ex: récupérer le voyage, ses participants, et les infos utilisateurs des participants en une seule ligne).
 * Que l'affichage d'un bouton ne dépend pas uniquement de la logique PHP, mais aussi des outils Frontend (Vite/Tailwind) et de la gestion du cache de Laravel.
 
-**Commits représentatifs :** "Validation complète des Blocs B et C : Modèle Voyage, CRUD complet, Vues et fix des Policies"
+**Commits représentatifs :3594b25, 06ca904, b430aa0, e843314, 6ef0087, c91a5c7, d79ec3e, 240741e, bac4e48, 92b32ff, 8fd789a**
 
 
 ### Nolan Felmit
