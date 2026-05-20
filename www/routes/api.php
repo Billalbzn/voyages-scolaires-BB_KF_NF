@@ -4,6 +4,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\VoyageApiController;
 
-Route::middleware('auth:sanctum')->group(function () {
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Routes API protégées par Sanctum. Le préfixe de nom 'api.' évite
+| les conflits avec les routes web qui ont les mêmes noms de ressources
+| (par exemple : 'voyages.index' existe en web ET en API).
+|
+*/
+
+Route::middleware('auth:sanctum')->name('api.')->group(function () {
     Route::apiResource('voyages', VoyageApiController::class);
 });
