@@ -84,6 +84,7 @@ Phase : 2 — Développement (CRUD, Eloquent, API REST, Rôles)
 **Blocs réalisés :** D, E
 
 **Ce que j'ai implémenté :**
+
 * **Bloc D (CRUD Participants) :** Création du `ParticipantController` pour gérer les inscriptions. Mise en place de la logique de validation parentale pour les voyages scolaires et gestion des relations avec les modèles `Voyage` et `User`.
 * **Bloc E (API REST + tests Bruno) :** Développement du `VoyageApiController` pour exposer les données via des endpoints REST (index, show, store, update, destroy).
 * **Sécurisation et Authentification :** Installation et configuration complète de Laravel Sanctum via la commande `php artisan install:api` pour générer la table `personal_access_tokens` et activer le guard associé. Intégration du middleware `auth:sanctum` sur les routes de l'API.
@@ -93,14 +94,16 @@ Phase : 2 — Développement (CRUD, Eloquent, API REST, Rôles)
 * **Tests :** Création d'une collection de requêtes dans Bruno pour tester manuellement chaque méthode de l'API, avec gestion des tokens d'authentification.
 
 **Difficulté principale rencontrée :**
+
 * **Erreur de configuration de l'Auth Guard :** Apparition d'une exception `InvalidArgumentException (Auth guard [sanctum] is not defined)` lors des requêtes API. Ce dysfonctionnement provenait de l'absence d'initialisation de l'infrastructure de l'API Laravel, problème corrigé par l'exécution de la procédure standard d'installation de l'API.
 * **Conflit de routage (ReflectionException) :** Lors de la mise en place du CRUD, l'oubli d'importation de la classe `ParticipantController` dans `web.php` a provoqué une erreur de réflexion système lors de l'exécution des commandes artisan, bloquant la génération de la liste des routes.
 * **Inclusion accidentelle de fichiers et synchronisation Git :** Intégration involontaire d'une base de données SQLite générée en dehors des conteneurs Docker. Situation résolue par l'usage de la commande `git rm --cached`. Difficultés initiales avec la gestion de l'historique distant (erreurs `fetch first` et conflits de fusion) suite à des modifications directes sur GitHub, résolues via l'éditeur de conflits de VS Code et des commandes `git pull`.
 
 **Ce que j'ai appris :**
+
 * La structure MVC d'une API Laravel : comprendre comment découpler la logique du contrôleur standard du contrôleur API pour isoler les retours JSON.
 * L'installation et la configuration automatisée des services d'API sous les versions récentes de Laravel à l'aide de `php artisan install:api`, ainsi que l'utilisation des traits Eloquent (`HasApiTokens`).
 * L'importance de la configuration des routes et de l'auto-chargement des classes (le rôle crucial du fichier `web.php` et des imports `use`).
 * La gestion collaborative sous Git : résoudre les conflits de version entre les contributions distantes et locales, et manipuler le fichier `.gitignore` pour assurer la propreté du dépôt partagé.
 
-**Commits représentatifs :** dca1b8f, 31df1ec, ef2b39d, 66b3a8f, d802076
+**Commits représentatifs :** dca1b8f, 31df1ec, ef2b39d, 66b3a8f, d802076, 2318ac7
