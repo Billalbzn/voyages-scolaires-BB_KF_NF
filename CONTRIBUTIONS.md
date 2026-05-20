@@ -11,7 +11,7 @@ Phase : 2 — Développement (CRUD, Eloquent, API REST, Rôles)
 | A | Auth + Rôles + Policies | Billal Bouziane | 🟢 Terminé | 9899b22, da9c78c, aedcbac, 104090d, acc9b03, 5b111a1 |
 | B | Modèles & Migrations | Karim Fadli | 🟢 Terminé | 3594b25, 06ca904  |
 | C | CRUD Voyages | Karim Fadli | 🟢 Terminé | b430aa0, e843314, c91a5c7, d79ec3e, 240741e |
-| D | CRUD Participants | Nolan Felmit | ⚪ À faire | — |
+| D | CRUD Participants | Nolan Felmit | 🟢 Terminé | dca1b8f |
 | E | API REST + tests Bruno | Nolan Felmit | ⚪ À faire | — |
 
 *Légende statuts : 🟢 Terminé · 🟡 En cours · ⚪ À faire · 🔴 Bloqué*
@@ -84,7 +84,7 @@ Phase : 2 — Développement (CRUD, Eloquent, API REST, Rôles)
 **Blocs réalisés :** D, E
 
 **Ce que j'ai implémenté :**
-(à compléter par NF)
+* Bloc D : Mise en place de la logique d'inscription et de la validation parentale achevée.
 
 **Difficulté principale rencontrée :**
 (à compléter par NF)
@@ -92,4 +92,4 @@ Phase : 2 — Développement (CRUD, Eloquent, API REST, Rôles)
 **Ce que j'ai appris :**
 (à compléter par NF)
 
-**Commits représentatifs :** (à compléter par NF)
+**Commits représentatifs :** dca1b8f
