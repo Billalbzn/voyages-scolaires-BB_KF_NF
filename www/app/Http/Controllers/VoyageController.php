@@ -16,11 +16,11 @@ class VoyageController extends Controller
         return view('voyages.index', compact('voyages'));
     }
 
-    public function create()
-    {
-        return view('voyages.create');
-    }
-
+public function create()
+{
+    \Gate::authorize('create', Voyage::class);  // ← cette ligne manque probablement
+    return view('voyages.create');
+}
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
