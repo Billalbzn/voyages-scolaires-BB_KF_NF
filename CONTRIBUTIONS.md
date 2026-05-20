@@ -12,7 +12,7 @@ Phase : 2 — Développement (CRUD, Eloquent, API REST, Rôles)
 | B | Modèles & Migrations | Karim Fadli | 🟢 Terminé | 3594b25, 06ca904  |
 | C | CRUD Voyages | Karim Fadli | 🟢 Terminé | b430aa0, e843314, c91a5c7, d79ec3e, 240741e |
 | D | CRUD Participants | Nolan Felmit | 🟢 Terminé | dca1b8f |
-| E | API REST + tests Bruno | Nolan Felmit | 🟢 Terminé | 31df1ec, ef2b39d |
+| E | API REST + tests Bruno | Nolan Felmit | 🟢 Terminé | 31df1ec, ef2b39d, 66b3a8f, d802076 |
 
 *Légende statuts : 🟢 Terminé · 🟡 En cours · ⚪ À faire · 🔴 Bloqué*
 
@@ -86,17 +86,21 @@ Phase : 2 — Développement (CRUD, Eloquent, API REST, Rôles)
 **Ce que j'ai implémenté :**
 * **Bloc D (CRUD Participants) :** Création du `ParticipantController` pour gérer les inscriptions. Mise en place de la logique de validation parentale pour les voyages scolaires et gestion des relations avec les modèles `Voyage` et `User`.
 * **Bloc E (API REST + tests Bruno) :** Développement du `VoyageApiController` pour exposer les données via des endpoints REST (index, show, store, update, destroy).
-* **Sécurisation :** Implémentation du middleware `auth:sanctum` sur toutes les routes de l'API pour garantir que seuls les utilisateurs authentifiés accèdent aux données.
+* **Sécurisation et Authentification :** Installation et configuration complète de Laravel Sanctum via la commande `php artisan install:api` pour générer la table `personal_access_tokens` et activer le guard associé. Intégration du middleware `auth:sanctum` sur les routes de l'API.
+* **Modèle User :** Importation et activation du trait `HasApiTokens` dans le modèle `User` afin de lier la gestion des jetons d'accès aux comptes utilisateurs.
+* **Correction des routes web :** Nettoyage du fichier `routes/web.php` par la suppression d'une route redondante qui entrait en conflit avec le travail de Karim, fusion des structures de middleware d'authentification et correction des importations de classes manquantes.
+* **Nettoyage du dépôt :** Suppression de la base de données SQLite locale (`www/voyages`) incluse par erreur dans le suivi Git, et mise à jour des règles d'exclusion dans `.gitignore`.
 * **Tests :** Création d'une collection de requêtes dans Bruno pour tester manuellement chaque méthode de l'API, avec gestion des tokens d'authentification.
 
 **Difficulté principale rencontrée :**
+* **Erreur de configuration de l'Auth Guard :** Apparition d'une exception `InvalidArgumentException (Auth guard [sanctum] is not defined)` lors des requêtes API. Ce dysfonctionnement provenait de l'absence d'initialisation de l'infrastructure de l'API Laravel, problème corrigé par l'exécution de la procédure standard d'installation de l'API.
 * **Conflit de routage (ReflectionException) :** Lors de la mise en place du CRUD, l'oubli d'importation de la classe `ParticipantController` dans `web.php` a provoqué une erreur de réflexion système lors de l'exécution des commandes artisan, bloquant la génération de la liste des routes.
-* **Synchronisation Git :** J'ai rencontré des difficultés avec la gestion de l'historique distant (erreurs `fetch first` et conflits de fusion) suite à des modifications directes sur GitHub. L'apprentissage de la résolution de conflits via VS Code et la commande `git pull` a été nécessaire pour réaligner mon travail local avec le dépôt distant.
+* **Inclusion accidentelle de fichiers et synchronisation Git :** Intégration involontaire d'une base de données SQLite générée en dehors des conteneurs Docker. Situation résolue par l'usage de la commande `git rm --cached`. Difficultés initiales avec la gestion de l'historique distant (erreurs `fetch first` et conflits de fusion) suite à des modifications directes sur GitHub, résolues via l'éditeur de conflits de VS Code et des commandes `git pull`.
 
 **Ce que j'ai appris :**
 * La structure MVC d'une API Laravel : comprendre comment découpler la logique du contrôleur standard du contrôleur API pour isoler les retours JSON.
+* L'installation et la configuration automatisée des services d'API sous les versions récentes de Laravel à l'aide de `php artisan install:api`, ainsi que l'utilisation des traits Eloquent (`HasApiTokens`).
 * L'importance de la configuration des routes et de l'auto-chargement des classes (le rôle crucial du fichier `web.php` et des imports `use`).
-* La gestion collaborative sous Git : gérer les conflits de version entre les contributions distantes et locales est une étape indispensable pour éviter de perdre du code.
-* L'utilisation de l'authentification API avec Laravel Sanctum pour sécuriser les endpoints en production.
+* La gestion collaborative sous Git : résoudre les conflits de version entre les contributions distantes et locales, et manipuler le fichier `.gitignore` pour assurer la propreté du dépôt partagé.
 
-**Commits représentatifs :** dca1b8f, 31df1ec, ef2b39d
+**Commits représentatifs :** dca1b8f, 31df1ec, ef2b39d, 66b3a8f, d802076
