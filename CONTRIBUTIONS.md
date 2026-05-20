@@ -91,5 +91,3 @@ Phase : 2 — Développement (CRUD, Eloquent, API REST, Rôles)
 
 **Ce que j'ai appris :**
 (à compléter par NF)
-
-**Commits représentatifs :** dca1b8f
