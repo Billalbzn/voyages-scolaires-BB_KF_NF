@@ -1,0 +1,148 @@
+{
+  "info": {
+    "name": "Voyages Scolaires API",
+    "_postman_id": "voyages-api-collection",
+    "description": "Collection de tests pour l'API REST de gestion des voyages scolaires. Necessite un token Sanctum dans l'header Authorization. Generer un token via: docker compose exec app php artisan tinker --execute=\"echo App\\Models\\User::where('email', 'enseignant@test.fr')->first()->createToken('test')->plainTextToken;\"",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "REMPLACER_PAR_VOTRE_TOKEN_SANCTUM",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Liste des voyages",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/voyages",
+          "host": ["{{base_url}}"],
+          "path": ["voyages"]
+        },
+        "description": "Retourne la liste paginee de tous les voyages avec leurs participants. Necessite authentification Sanctum."
+      }
+    },
+    {
+      "name": "2. Detail d'un voyage",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/voyages/1",
+          "host": ["{{base_url}}"],
+          "path": ["voyages", "1"]
+        },
+        "description": "Retourne le detail du voyage 1 avec ses participants et leurs utilisateurs charges (eager loading)."
+      }
+    },
+    {
+      "name": "3. Creer un voyage",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"destination\": \"Barcelone\",\n    \"date_depart\": \"2026-09-15\",\n    \"date_retour\": \"2026-09-20\",\n    \"places_max\": 30\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/voyages",
+          "host": ["{{base_url}}"],
+          "path": ["voyages"]
+        },
+        "description": "Cree un nouveau voyage. Necessite le role enseignant ou admin (sinon 403). Un eleve ne peut PAS creer."
+      }
+    },
+    {
+      "name": "4. Modifier un voyage",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"places_max\": 25\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/voyages/1",
+          "host": ["{{base_url}}"],
+          "path": ["voyages", "1"]
+        },
+        "description": "Met a jour partiellement un voyage. Necessite d'etre admin ou createur du voyage."
+      }
+    },
+    {
+      "name": "5. Supprimer un voyage (admin only)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/voyages/1",
+          "host": ["{{base_url}}"],
+          "path": ["voyages", "1"]
+        },
+        "description": "Supprime un voyage. Reserve aux admins uniquement (un enseignant qui essaie obtient 403)."
+      }
+    }
+  ]
+}
