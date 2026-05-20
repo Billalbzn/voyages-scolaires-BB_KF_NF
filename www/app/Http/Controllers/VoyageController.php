@@ -2,75 +2,89 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Gate;
 use App\Models\Voyage;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class VoyageController extends Controller
 {
+    /**
+     * Afficher la liste des voyages.
+     * Accessible à tout utilisateur authentifié.
+     */
     public function index()
     {
         $voyages = Voyage::all();
         return view('voyages.index', compact('voyages'));
     }
 
-public function create()
-{
-    \Gate::authorize('create', Voyage::class);  // ← cette ligne manque probablement
-    return view('voyages.create');
-}
+    /**
+     * Afficher le formulaire de création d'un voyage.
+     * Réservé aux enseignants et admins (via VoyagePolicy::create).
+     */
+    public function create()
+    {
+        Gate::authorize('create', Voyage::class);
+        return view('voyages.create');
+    }
+
+    /**
+     * Enregistrer un nouveau voyage en base.
+     * Réservé aux enseignants et admins (via VoyagePolicy::create).
+     */
     public function store(Request $request): RedirectResponse
     {
+        Gate::authorize('create', Voyage::class);
+
         $validated = $request->validate([
             'destination' => 'required|string|max:255',
             'date_depart' => 'required|date|after:today',
             'date_retour' => 'required|date|after:date_depart',
-            'places_max' => 'required|integer|min:1|max:200',
+            'places_max'  => 'required|integer|min:1|max:200',
         ]);
 
         $validated['user_id'] = Auth::id();
-
         Voyage::create($validated);
 
         return redirect()->route('voyages.index')
                          ->with('success', 'Voyage créé.');
     }
 
+    /**
+     * Afficher le détail d'un voyage avec ses participants.
+     * Accessible à tout utilisateur authentifié.
+     */
     public function show(Voyage $voyage)
     {
-        // On charge également les participants et les utilisateurs liés pour l'affichage
         $voyage->load('participants.user');
-
         return view('voyages.show', compact('voyage'));
     }
 
     /**
      * Afficher le formulaire d'édition d'un voyage.
+     * Réservé à l'admin ou au créateur du voyage (via VoyagePolicy::update).
      */
     public function edit(Voyage $voyage)
     {
-        // Sécurité version Laravel 11
         Gate::authorize('update', $voyage);
-
         return view('voyages.edit', compact('voyage'));
     }
 
     /**
-     * Mettre à jour le voyage dans la base de données.
+     * Mettre à jour un voyage en base.
+     * Réservé à l'admin ou au créateur du voyage (via VoyagePolicy::update).
      */
     public function update(Request $request, Voyage $voyage): RedirectResponse
     {
-        // Sécurité version Laravel 11
         Gate::authorize('update', $voyage);
 
-        // Validation stricte des données reçues (règle du PDF)
         $validated = $request->validate([
             'destination' => 'required|string|max:255',
             'date_depart' => 'required|date|after:today',
             'date_retour' => 'required|date|after:date_depart',
-            'places_max' => 'required|integer|min:1|max:200',
+            'places_max'  => 'required|integer|min:1|max:200',
         ]);
 
         $voyage->update($validated);
@@ -80,13 +94,12 @@ public function create()
     }
 
     /**
-     * Supprimer un voyage de la base de données.
+     * Supprimer un voyage.
+     * Réservé aux admins uniquement (via VoyagePolicy::delete).
      */
     public function destroy(Voyage $voyage): RedirectResponse
     {
-        // Sécurité version Laravel 11
         Gate::authorize('delete', $voyage);
-
         $voyage->delete();
 
         return redirect()->route('voyages.index')
