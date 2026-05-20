@@ -18,3 +18,5 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+Route::get('/voyages', function () { return 'Page des voyages'; })->name('voyages.index');
+Route::middleware(['auth'])->group(function () { Route::resource('voyages.participants', ParticipantController::class); });
