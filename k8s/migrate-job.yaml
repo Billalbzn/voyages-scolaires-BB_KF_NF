@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: laravel-migrate
+spec:
+  backoffLimit: 3          # réessaie tant que MariaDB n'est pas prête (crash-and-retry)
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: migrate
+          # MÊME image que le Deployment (le code + artisan y sont déjà).
+          image: ghcr.io/billalbzn/voyages-scolaires-bb_kf_nf:latest
+          command: ["php", "artisan", "migrate", "--force"]
+          envFrom:
+            - configMapRef:
+                name: laravel-config
+            - secretRef:
+                name: laravel-secrets
+# Relancer : kubectl delete job laravel-migrate && kubectl apply -f k8s/migrate-job.yaml
