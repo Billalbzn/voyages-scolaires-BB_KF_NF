@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: laravel-config
+data:
+  APP_NAME: "Voyages Scolaires"
+  APP_ENV: production
+  APP_DEBUG: "false"
+  APP_URL: http://localhost:8080
+  DB_CONNECTION: mysql
+  DB_HOST: mariadb            # nom du Service MariaDB (résolu par le DNS du cluster)
+  DB_PORT: "3306"
+  DB_DATABASE: voyages_scolaires
+  # Sessions en base : indispensable en multi-replicas (une app répliquée doit
+  # être stateless — sinon déconnexions aléatoires selon le pod touché).
+  SESSION_DRIVER: database
+  CACHE_STORE: database
+  QUEUE_CONNECTION: database
+  # Logs vers la sortie standard -> lisibles via `kubectl logs`.
+  LOG_CHANNEL: stderr

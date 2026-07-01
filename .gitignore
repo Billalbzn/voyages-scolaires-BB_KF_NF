@@ -17,6 +17,9 @@ public_html/hot
 
 storage/*.key
 .env
+# Secret Kubernetes : contient des mots de passe -> jamais dans git.
+# Seul k8s/secret.example.yaml est versionné.
+k8s/secret.yaml
 Homestead.yaml
 Homestead.json
 /.vagrant

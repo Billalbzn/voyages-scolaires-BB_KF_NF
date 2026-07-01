@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: laravel
+spec:
+  replicas: 2                       # >= 2 pour tester la haute dispo / le stateless
+  selector:
+    matchLabels:
+      app: laravel
+  template:
+    metadata:
+      labels:
+        app: laravel
+    spec:
+      containers:
+        - name: laravel
+          # Image publiée par le pipeline CI/CD — TOUT en minuscules.
+          image: ghcr.io/billalbzn/voyages-scolaires-bb_kf_nf:latest
+          ports:
+            - containerPort: 80      # Apache écoute sur le port 80
+          envFrom:
+            - configMapRef:
+                name: laravel-config
+            - secretRef:
+                name: laravel-secrets
+          # Route santé native de Laravel (déclarée dans bootstrap/app.php : health: '/up')
+          livenessProbe:
+            httpGet:
+              path: /up
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /up
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
