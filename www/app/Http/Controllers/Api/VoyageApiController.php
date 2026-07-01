@@ -24,9 +24,20 @@ class VoyageApiController extends Controller
      */
     public function index(): JsonResponse
     {
-        $voyages = Voyage::with('participants')->paginate(15);
+        $voyages = Voyage::withCount('participants')->paginate(15);
 
         return response()->json($voyages);
+    }
+
+    /**
+     * Liste des participants d'un voyage (avec les infos utilisateur).
+     * GET /api/voyages/{voyage}/participants
+     */
+    public function participants(Voyage $voyage): JsonResponse
+    {
+        return response()->json(
+            $voyage->participants()->with('user')->get()
+        );
     }
 
     /**

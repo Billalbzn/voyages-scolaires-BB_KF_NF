@@ -17,4 +17,6 @@ use App\Http\Controllers\Api\VoyageApiController;
 
 Route::middleware('auth:sanctum')->name('api.')->group(function () {
     Route::apiResource('voyages', VoyageApiController::class);
+    Route::get('voyages/{voyage}/participants', [VoyageApiController::class, 'participants'])
+        ->name('voyages.participants');
 });
