@@ -1,0 +1,21 @@
+# Contexte de build de l'image de production (Dockerfile.prod).
+# On exclut : les secrets, les dépendances régénérées, le superflu.
+
+.git
+.github
+
+# Secrets / config locale — ne JAMAIS embarquer dans une image publique.
+# (les valeurs viennent du ConfigMap/Secret Kubernetes à l'exécution)
+.env
+www/.env
+k8s/secret.yaml
+
+# Régénéré dans l'image par "composer install --no-dev"
+www/vendor
+
+# Non nécessaire (assets déjà compilés dans www/public/build)
+www/node_modules
+
+# Divers
+lot-*.tgz
+www/storage/logs/*.log
