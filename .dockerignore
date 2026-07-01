@@ -19,3 +19,6 @@ www/node_modules
 # Divers
 lot-*.tgz
 www/storage/logs/*.log
+.k8s-run
+*.bat
+*.ps1

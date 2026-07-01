@@ -33,3 +33,5 @@ Homestead.json
 auth.json
 www/voyages
 www/voyages_scolaires
+# Manifestes k8s générés à la volée par le launcher (image locale + secret réel)
+.k8s-run/
