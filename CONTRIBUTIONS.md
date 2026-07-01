@@ -107,3 +107,61 @@ Phase : 2 — Développement (CRUD, Eloquent, API REST, Rôles)
 * La gestion collaborative sous Git : résoudre les conflits de version entre les contributions distantes et locales, et manipuler le fichier `.gitignore` pour assurer la propreté du dépôt partagé.
 
 **Commits représentatifs :** dca1b8f, 31df1ec, ef2b39d, 66b3a8f, d802076, 2318ac7
+
+---
+
+# Contributions — Phase 3 & 4 (CI/CD, Kubernetes, finalisation)
+
+## Tableau de bord
+
+| Bloc | Sujet | Responsable | Statut |
+| :--- | :--- | :--- | :--- |
+| A | Dockerfile.prod + workflow CI/CD (tests → image GHCR) | Billal Bouziane | 🟢 Terminé |
+| B | k8s stateless : Deployment, Service, Ingress, ConfigMap/Secret, sessions en base | Karim Fadli | 🟢 Terminé |
+| C | k8s stateful : StatefulSet MariaDB, PVC, Job migrate, CronJob backup | Nolan Felmit | 🟢 Terminé |
+
+Chacun a aussi complété sa part **Laravel** : Billal (Policies/tests d'accès),
+Karim (Formalités/Documents), Nolan (autorisation parentale + endpoint API participants).
+
+---
+
+## Décisions d'architecture
+
+### 1. Image unique Apache (`php:8.3-apache`) plutôt que pod multi-conteneurs (nginx + php-fpm)
+**Décision :** une seule image Apache embarquant PHP et le code (`docker/php/Dockerfile.prod`).
+**Alternatives écartées :** deux conteneurs nginx + php-fpm dans le même pod (comme en dev Compose).
+**Pourquoi :** simplicité de déploiement (un seul conteneur à sonder, une seule image à builder),
+suffisant pour la charge du projet. Le multi-conteneurs se justifierait à plus grande échelle
+(scaling indépendant du serveur web et de PHP).
+
+### 2. Driver de sessions : `database` plutôt que `file`
+**Décision :** `SESSION_DRIVER=database` dans le ConfigMap.
+**Alternatives écartées :** `file` (défaut) — provoque des déconnexions aléatoires en multi-replicas,
+car chaque pod a son propre système de fichiers ; `cookie` ; `redis` (plus lourd à opérer ici).
+**Pourquoi :** avec ≥ 2 replicas derrière le load-balancer Traefik, la session doit être partagée.
+La table `sessions` existe déjà (migrations par défaut de Laravel). Redis reste l'évolution standard.
+
+### 3. Stratégie de tags d'image : `:latest` **et** `:sha`
+**Décision :** publier deux tags à chaque build (`ghcr.io/.../voyages...:latest` et `:<sha>`).
+**Alternatives écartées :** `:latest` seul (pas de traçabilité), tag manuel par version (fastidieux).
+**Pourquoi :** `:latest` sert au déploiement courant, `:<sha>` garantit la traçabilité exacte
+(reproductibilité et rollback vers un commit précis).
+
+---
+
+## Auto-évaluation Phase 3/4 (par membre) — à compléter par chacun avant l'oral
+
+### Billal Bouziane
+- **Ce que j'ai réalisé :** …
+- **Difficulté principale :** …
+- **Ce que j'ai appris :** …
+
+### Karim Fadli
+- **Ce que j'ai réalisé :** …
+- **Difficulté principale :** …
+- **Ce que j'ai appris :** …
+
+### Nolan Felmit
+- **Ce que j'ai réalisé :** …
+- **Difficulté principale :** …
+- **Ce que j'ai appris :** …
