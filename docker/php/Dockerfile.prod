@@ -1,0 +1,37 @@
+# =============================================================================
+# Dockerfile de PRODUCTION — image auto-suffisante (Apache + PHP + code)
+# Cible : Kubernetes (k3d). Le code est COPIÉ dans l'image (fin du volume).
+# Base Apache : un seul conteneur sert le HTTP et exécute PHP.
+# =============================================================================
+FROM php:8.3-apache
+
+# Dépendances système nécessaires aux extensions PHP
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git unzip libpng-dev libonig-dev libxml2-dev libzip-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Extensions PHP requises par Laravel + MySQL/MariaDB
+RUN docker-php-ext-install \
+    pdo_mysql mbstring exif pcntl bcmath gd zip
+
+# Composer (copié depuis l'image officielle)
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# DocumentRoot Apache -> public/ + activation du URL rewriting Laravel
+RUN sed -ri 's!/var/www/html!/var/www/html/public!g' \
+    /etc/apache2/sites-available/000-default.conf \
+    && a2enmod rewrite
+
+WORKDIR /var/www/html
+
+# Le code entre dans l'image (plus de bind-mount en prod)
+COPY www/ .
+
+# Dépendances de prod uniquement (pas de Pest/Pail/outils dev), autoloader optimisé
+RUN composer install --no-dev --optimize-autoloader \
+    --no-interaction --no-progress
+
+# storage/ et bootstrap/cache doivent être inscriptibles par Apache (www-data)
+RUN chown -R www-data:www-data storage bootstrap/cache
+
+EXPOSE 80
