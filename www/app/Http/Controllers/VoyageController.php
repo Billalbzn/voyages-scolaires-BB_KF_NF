@@ -58,7 +58,7 @@ class VoyageController extends Controller
      */
     public function show(Voyage $voyage)
     {
-        $voyage->load('participants.user');
+        $voyage->load('participants.user', 'documents');
         return view('voyages.show', compact('voyage'));
     }
 
