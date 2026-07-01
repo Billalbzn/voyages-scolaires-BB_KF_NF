@@ -30,6 +30,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'role' => 'eleve',
         ];
     }
 
@@ -41,5 +42,13 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
+    }
+
+    /**
+     * Fixer un rôle précis (eleve, parent, enseignant, admin).
+     */
+    public function role(string $role): static
+    {
+        return $this->state(fn (array $attributes) => ['role' => $role]);
     }
 }
